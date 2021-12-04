@@ -1,4 +1,5 @@
 cmd/server/tmp
 .vscode
 web/snapcooter.wasm
+web/wasm_exec.js
 tmp
