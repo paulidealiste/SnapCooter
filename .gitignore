@@ -1,0 +1,4 @@
+cmd/server/tmp
+.vscode
+web/snapcooter.wasm
+tmp

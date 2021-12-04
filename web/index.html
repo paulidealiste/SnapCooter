@@ -1,0 +1,72 @@
+<html style="overflow: auto;">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.9.4/dist/css/uikit.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.9.4/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.9.4/dist/js/uikit-icons.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="util.js"></script>
+    <script src="wasm_exec.js"></script>
+    <script>
+        const go = new Go();
+        WebAssembly.instantiateStreaming(fetch("snapcooter.wasm"), go.importObject).then((result) => {
+            go.run(result.instance);
+        });
+    </script>
+</head>
+
+<body>
+    <div x-data="app()">
+        <nav class="uk-navbar-container" x-data="{ palettes: createPalettes(), selected: 1 }" uk-navbar>
+            <div class="uk-navbar-left" x-data="{ spalette: palettes[selected] }">
+                <a class="uk-navbar-item uk-logo">
+                    <div>
+                        SnapCooter
+                        <div class="uk-navbar-subtitle">generative meets data</div>
+                    </div>
+                </a>
+                <ul class="uk-navbar-nav">
+                    <li>
+                        <a x-on:click="cooters = setup(spalette)">
+                            <span class="uk-icon uk-margin-small-right" uk-icon="icon: star"></span>
+                            Setup
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <span class="uk-icon uk-margin-small-right" uk-icon="icon: paint-bucket"></span>
+                            Palette
+                        </a>
+                        <div uk-dropdown="mode: click; animation: uk-animation-slide-top-small; duration: 800">
+                            <template class="uk-flex uk-flex-column" x-for="(palette, index) in palettes" :key="index">
+                                <div class="uk-flex uk-flex-middle" x-on:click="spalette = palettes[index]">
+                                    <input x-model="selected" type="radio" :value="index" :id="index" style="padding: 5px;">
+                                    <label class="uk-flex" :for="index">
+                                        <template class="uk-flex" x-for="color in palette">
+                                            <div :style="{ background: color, height: '30px', width: '30px' }"></div>
+                                        </template>
+                                    </label>
+                                </div>
+                            </template>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="uk-grid-collapse uk-text-center uk-margin-large-top" uk-grid>
+            <div class="uk-background-muted uk-padding uk-width-expand@m">
+                <canvas class="uk-background-default" id="sonorous-canvas" width="800" height="600"></canvas>
+            </div>
+            <div class="uk-background-secondary uk-padding uk-width-auto@m">
+                <ul class="uk-iconnav uk-iconnav-vertical">
+                    <li><a uk-icon="icon: future" x-on:click="run()">Run</a></li>
+                    <li><a uk-icon="icon: history" x-on:click="pause()">Pause</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>
