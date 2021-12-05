@@ -6,24 +6,23 @@ import (
 )
 
 //Bearing represents the facing of the cooter in a cartesian grid
-type Bearing string
-
 const (
-	N  Bearing = "N"
-	NW Bearing = "NW"
-	NE Bearing = "NE"
-	E  Bearing = "E"
-	W  Bearing = "W"
-	SE Bearing = "SE"
-	SW Bearing = "Sw"
-	S  Bearing = "S"
+	N  string = "N"
+	NW string = "NW"
+	NE string = "NE"
+	E  string = "E"
+	W  string = "W"
+	SE string = "SE"
+	SW string = "SW"
+	S  string = "S"
 )
 
 // Cooter is the main character usedd for all the work
 type Cooter struct {
 	ID            int     `json:"ID"`
 	Name          string  `json:"Name"`
-	Bearing       Bearing `json:"Bearing"`
+	Size          int     `json:"Size"`
+	Bearing       string  `json:"Bearing"`
 	X             int     `json:"X"`
 	Y             int     `json:"Y"`
 	Color         string  `json:"Color"`

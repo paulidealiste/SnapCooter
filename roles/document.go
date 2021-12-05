@@ -11,6 +11,7 @@ type Document struct {
 type Setup struct {
 	CooterCount int      `json:"cooterCount"`
 	Palette     []string `json:"palette"`
+	CooterSize  int      `json:"cooterSize"`
 	Document
 }
 

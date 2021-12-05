@@ -2,8 +2,8 @@
 package engine
 
 import (
-	"fmt"
 	"syscall/js"
+	"time"
 
 	"github.com/paulidealiste/SnapCooter/roles"
 	"github.com/paulidealiste/SnapCooter/utils"
@@ -26,18 +26,19 @@ func CooterSetup(this js.Value, args []js.Value) interface{} {
 		fill := utils.ColorForPosition(setup.Palette, x, y, setup.Width, setup.Height)
 		cc := roles.Cooter{
 			ID:            utils.RandomInt(9000, 90000),
-			Bearing:       "E",
+			Bearing:       utils.RandomBearing(),
 			Name:          utils.RandomName(),
 			X:             x,
 			Y:             y,
 			Color:         fill,
 			Determination: 0.5,
 			Friendliness:  0.5,
+			Size:          setup.CooterSize,
 		}
 		cooters[i] = cc.ObtainJSON()
 		ctx.Set("fillStyle", fill)
-		ctx.Call("fillRect", x, y, 10, 10)
-		fmt.Println("")
+		ctx.Call("fillRect", x, y, cc.Size, cc.Size)
+		time.Sleep(1 * time.Millisecond)
 	}
 
 	return map[string]interface{}{

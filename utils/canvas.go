@@ -1,6 +1,8 @@
+// Package utils provide cooter assemblies utility functions
 package utils
 
 import (
+	"math"
 	"syscall/js"
 
 	"github.com/paulidealiste/SnapCooter/roles"
@@ -32,4 +34,36 @@ func GetCanvas(cid string) (js.Value, error) {
 		return js.Value{}, js.Error{}
 	}
 	return canvas, nil
+}
+
+func LinearScale(pmin int, pmax int, cmin int, cmax int, x int) int {
+	fpmin := float64(pmin)
+	fpmax := float64(pmax)
+	fcmin := float64(cmin)
+	fcmax := float64(cmax)
+	fx := float64(x)
+	i := int(math.Round(((fx - fpmin) / (fpmax - fpmin)) * ((fcmax - fcmin) + fcmin)))
+	return i
+}
+
+func OppositeBearing(b string) string {
+	switch b {
+	case roles.E:
+		return roles.W
+	case roles.N:
+		return roles.S
+	case roles.NE:
+		return roles.SW
+	case roles.NW:
+		return roles.SE
+	case roles.S:
+		return roles.N
+	case roles.SE:
+		return roles.NW
+	case roles.SW:
+		return roles.NE
+	case roles.W:
+		return roles.E
+	}
+	return roles.E
 }
