@@ -73,7 +73,7 @@ func createInterpolatedList(cfg InterpolatedPaletteConfig) []interface{} {
 			hend := RgbToHsv(end)
 			hinc := lerpHSV(hstart, hend, t)
 			rfin := HsvToRgb(hinc)
-			palette[i] = fmt.Sprintf("rgb(%f,%f,%f)", rfin.R, rfin.G, rfin.B)
+			palette[i] = fmt.Sprintf("rgb(%f,%f,%f)", math.Round(rfin.R), math.Round(rfin.G), math.Round(rfin.B))
 		}
 	}
 	return palette

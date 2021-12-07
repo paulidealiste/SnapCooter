@@ -35,7 +35,7 @@ func CooterStep(this js.Value, args []js.Value) interface{} {
 	canvas.Set("style", "border: 1px solid #419D78")
 	ctrs := make([]interface{}, len(actives))
 	for i, ct := range actives {
-		ct.Bearing, ct.X, ct.Y = next(ct.Bearing, ct.X, ct.Y, ct.Size, request.Width, request.Height)
+		ct.Bearing, ct.X, ct.Y = next(ct.Bearing, ct, request.Width, request.Height, ctx)
 		ctx.Set("fillStyle", ct.Color)
 		ctx.Call("fillRect", ct.X, ct.Y, ct.Size, ct.Size)
 		ctrs[i] = ct.ObtainJSON()
@@ -46,26 +46,26 @@ func CooterStep(this js.Value, args []js.Value) interface{} {
 	}
 }
 
-func next(b string, cx int, cy int, size int, width int, height int) (string, int, int) {
+func next(b string, ct roles.Cooter, width int, height int, ctx js.Value) (string, int, int) {
 	var step string
 	var x int
 	var y int
 	nb := b
 	passable := false
 	for !passable {
-		step, x, y, passable = calculateNext(nb, cx, cy, size, width, height)
+		step, x, y, passable = calculateNext(nb, ct, width, height, ctx)
 		if !passable {
 			if x > width {
-				cx = width - size
+				ct.X = width - ct.Size
 			}
 			if x < 0 {
-				cx = 0
+				ct.X = 0
 			}
 			if y > height {
-				cy = height - size
+				ct.Y = height - ct.Size
 			}
 			if y < 0 {
-				cy = 0
+				ct.Y = 0
 			}
 		}
 		nb = bearingFromShortlist(nb)
@@ -73,39 +73,42 @@ func next(b string, cx int, cy int, size int, width int, height int) (string, in
 	return step, x, y
 }
 
-func calculateNext(b string, cx int, cy int, size int, width int, height int) (string, int, int, bool) {
+func calculateNext(b string, ct roles.Cooter, width int, height int, ctx js.Value) (string, int, int, bool) {
 	var x int
 	var y int
 	switch b {
 	case roles.E:
-		x = cx + size
-		y = cy
+		x = ct.X + ct.Size
+		y = ct.Y
 	case roles.N:
-		x = cx
-		y = cy - size
+		x = ct.X
+		y = ct.Y - ct.Size
 	case roles.NE:
-		x = cx + size
-		y = cy - size
+		x = ct.X + ct.Size
+		y = ct.Y - ct.Size
 	case roles.NW:
-		x = cx - size
-		y = cy - size
+		x = ct.X - ct.Size
+		y = ct.Y - ct.Size
 	case roles.S:
-		x = cx
-		y = cy + size
+		x = ct.X
+		y = ct.Y + ct.Size
 	case roles.SE:
-		x = cx + size
-		y = cy + size
+		x = ct.X + ct.Size
+		y = ct.Y + ct.Size
 	case roles.SW:
-		x = cx - size
-		y = cy + size
+		x = ct.X - ct.Size
+		y = ct.Y + ct.Size
 	case roles.W:
-		x = cx - size
-		y = cy
+		x = ct.X - ct.Size
+		y = ct.Y
 	default:
-		x = cx
-		y = cy
+		x = ct.X
+		y = ct.Y
 	}
-	passable := hardBoundaryPassable(x, y, width, height, size)
+	passable := hardBoundaryPassable(x, y, width, height, ct.Size)
+	if passable {
+		passable = sniffDestination(x, y, ct, ctx)
+	}
 	return b, x, y, passable
 }
 

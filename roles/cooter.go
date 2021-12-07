@@ -3,6 +3,8 @@ package roles
 
 import (
 	"encoding/json"
+	"regexp"
+	"strconv"
 )
 
 //Bearing represents the facing of the cooter in a cartesian grid
@@ -26,8 +28,9 @@ type Cooter struct {
 	X             int     `json:"X"`
 	Y             int     `json:"Y"`
 	Color         string  `json:"Color"`
-	Determination float32 `json:"Determination"`
-	Friendliness  float32 `json:"Friendliness"`
+	Determination float64 `json:"Determination"`
+	Friendliness  float64 `json:"Friendliness"`
+	RGB           []int
 }
 
 //TranslateCooter creates a cooter instance from its js json definition
@@ -36,6 +39,7 @@ func TranslateCooter(jscooter string) (Cooter, error) {
 	if err := json.Unmarshal([]byte(jscooter), &cooter); err != nil {
 		return Cooter{}, err
 	}
+	cooter.RawRGB()
 	return cooter, nil
 }
 
@@ -51,4 +55,14 @@ func (c *Cooter) ObtainMap() map[string]interface{} {
 func (c *Cooter) ObtainJSON() string {
 	rep, _ := json.Marshal(c)
 	return string(rep)
+}
+
+//RawRGB sets the R,G,B slice from the rgb color string
+func (c *Cooter) RawRGB() {
+	re := regexp.MustCompile("[0-9]+")
+	rgbs := re.FindAllString(c.Color, -1)
+	r, _ := strconv.Atoi(rgbs[0])
+	g, _ := strconv.Atoi(rgbs[2])
+	b, _ := strconv.Atoi(rgbs[4])
+	c.RGB = []int{r, g, b}
 }

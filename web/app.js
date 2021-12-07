@@ -3,7 +3,7 @@ function app() {
         cooters: {},
         interval: null,
         setup(palette) {
-            const request = { canvasID: 'sonorous-canvas', cooterCount: 1000, cooterSize: 15, width: 800, height: 600, palette: palette };
+            const request = { canvasID: 'sonorous-canvas', cooterCount: 100, cooterSize: 10, width: 800, height: 600, palette: palette };
             const response = CooterSetup(JSON.stringify(request));
             const tas = CooterParser(response);
             return tas;

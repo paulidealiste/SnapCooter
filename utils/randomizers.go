@@ -52,3 +52,8 @@ func SampleSlice(s []string) string {
 	q := RandomInt(0, len(s)-1)
 	return s[q]
 }
+
+func SimpleProbable(probability float64) bool {
+	rand.Seed(time.Now().UnixNano())
+	return rand.Float64() < probability
+}
