@@ -19,7 +19,7 @@
 <body>
     <div x-data="app()">
         <nav class="uk-navbar-container" x-data="{ palettes: createPalettes(), selected: 1 }" uk-navbar>
-            <div class="uk-navbar-left" x-data="{ spalette: palettes[selected] }">
+            <div class="uk-navbar-left" x-data="{ spalette: palettes[selected], cootercount: 100, cootersize: 10 }">
                 <a class="uk-navbar-item uk-logo">
                     <div>
                         SnapCooter
@@ -28,10 +28,24 @@
                 </a>
                 <ul class="uk-navbar-nav">
                     <li>
-                        <a x-on:click="cooters = setup(spalette)">
+                        <a>
                             <span class="uk-icon uk-margin-small-right" uk-icon="icon: star"></span>
                             Setup
                         </a>
+                        <div uk-dropdown="mode: click; animation: uk-animation-slide-top-small; duration: 800">
+                            <div class="uk-flex uk-flex-column">
+                                <div class="uk-margin">
+                                    <p class="uk-text-small uk-text-middle">Cooter quantity<span class="uk-label uk-float-right" x-text="cootercount"></span></p>
+                                    <input class="uk-range" type="range" x-model="cootercount" min="1" max="1000" step="1">
+                                </div>
+                                <div class="uk-margin">
+                                    <p class="uk-text-small uk-text-middle">Cooter size <span class="uk-label uk-float-right" x-text="cootersize"></span></p>
+                                    <input class="uk-range" type="range" x-model="cootersize" min="1" max="20" step="1">
+                                </div>
+                                <hr>
+                                <button x-on:click="cooters = setup(spalette, cootercount, cootersize)" class="uk-button uk-button-default uk-width-1-1">setup</button>
+                            </div>
+                        </div>
                     </li>
                     <li>
                         <a>
