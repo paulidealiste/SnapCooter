@@ -35,15 +35,19 @@
                         <div uk-dropdown="mode: click; animation: uk-animation-slide-top-small; duration: 800">
                             <div class="uk-flex uk-flex-column">
                                 <div class="uk-margin">
-                                    <p class="uk-text-small uk-text-middle">Cooter quantity<span class="uk-label uk-float-right" x-text="cootercount"></span></p>
-                                    <input class="uk-range" type="range" x-model="cootercount" min="1" max="1000" step="1">
+                                    <p class="uk-text-small uk-text-middle">Cooter quantity<span
+                                            class="uk-label uk-float-right" x-text="cootercount"></span></p>
+                                    <input class="uk-range" type="range" x-model="cootercount" min="1" max="1000"
+                                        step="1">
                                 </div>
                                 <div class="uk-margin">
-                                    <p class="uk-text-small uk-text-middle">Cooter size <span class="uk-label uk-float-right" x-text="cootersize"></span></p>
+                                    <p class="uk-text-small uk-text-middle">Cooter size <span
+                                            class="uk-label uk-float-right" x-text="cootersize"></span></p>
                                     <input class="uk-range" type="range" x-model="cootersize" min="1" max="20" step="1">
                                 </div>
                                 <hr>
-                                <button x-on:click="cooters = setup(spalette, cootercount, cootersize)" class="uk-button uk-button-default uk-width-1-1">setup</button>
+                                <button x-on:click="cooters = setup(spalette, cootercount, cootersize)"
+                                    class="uk-button uk-button-default uk-width-1-1">setup</button>
                             </div>
                         </div>
                     </li>
@@ -55,7 +59,8 @@
                         <div uk-dropdown="mode: click; animation: uk-animation-slide-top-small; duration: 800">
                             <template class="uk-flex uk-flex-column" x-for="(palette, index) in palettes" :key="index">
                                 <div class="uk-flex uk-flex-middle" x-on:click="spalette = palettes[index]">
-                                    <input x-model="selected" type="radio" :value="index" :id="index" style="padding: 5px;">
+                                    <input x-model="selected" type="radio" :value="index" :id="index"
+                                        style="padding: 5px;">
                                     <label class="uk-flex" :for="index">
                                         <template class="uk-flex" x-for="color in palette">
                                             <div :style="{ background: color, height: '30px', width: '30px' }"></div>
@@ -63,6 +68,23 @@
                                     </label>
                                 </div>
                             </template>
+                        </div>
+                    </li>
+                    <li x-data="{ samples: createSamplers() }">
+                        <a>
+                            <span class="uk-icon uk-margin-small-right" uk-icon="icon: bolt"></span>
+                            Sample
+                        </a>
+                        <div uk-dropdown="mode: click; animation: uk-animation-slide-top-small; duration: 800">
+                            <div class="uk-dropdown-grid uk-child-width-1-1@m" uk-grid>
+                                <div>
+                                    <template x-for="(sample, index) in samples" :key="index">
+                                        <div x-on:click="drawSampler(sample)"
+                                            :style="{background: sample, cursor: 'pointer', height: '30px'}">
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
                         </div>
                     </li>
                 </ul>

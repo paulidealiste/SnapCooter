@@ -31,5 +31,16 @@ function app() {
             ].map(cfg => JSON.stringify(cfg));
             return CooterInterpolatedPalettes(...palettecfgs);
         },
+        createSamplers() {
+            const samplers = [
+                { Start: '#FFD23F', End: '#95C623', count: 10, type: 'HSV'} 
+            ].map(cfg => JSON.stringify(cfg));
+            const plers =  CooterInterpolatedPalettes(...samplers);
+            return plers[0];
+        },
+        drawSampler(color) {
+            const request = { canvasID: 'sonorous-canvas', color: color, width: 800, height: 600};           
+            DrawSampler(JSON.stringify(request));
+        }
     }
 }
