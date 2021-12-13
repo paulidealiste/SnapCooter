@@ -1,6 +1,8 @@
 package engine
 
 import (
+	"fmt"
+	"math"
 	"syscall/js"
 
 	"github.com/paulidealiste/SnapCooter/roles"
@@ -26,9 +28,18 @@ func DrawSampler(this js.Value, args []js.Value) interface{} {
 }
 
 func samplerCurve(ctx js.Value, color string, width int, height int) {
-	ctx.Set("strokeStyle", color)
-	ctx.Call("beginPath")
-	ctx.Call("moveTo", 10, 10)
-	ctx.Call("bezierCurveTo", 10+width/3, 10+height/4, 10+2*(width/5), 10+2*(height/3), width-10, height-10)
-	ctx.Call("stroke")
+	controls := []Point{
+		{X: 10, Y: 10},
+		{X: float64(10 + width/3), Y: float64(10 + height/4)},
+		{X: float64(10 + 2*(width/5)), Y: float64(10 + 2*(height/3))},
+		{X: float64(width) - 10, Y: float64(height) - 10},
+	}
+	sampled := SamplePoints(controls)
+	fmt.Println(sampled)
+	ctx.Set("fillStyle", color)
+	for _, sp := range sampled {
+		ctx.Call("beginPath")
+		ctx.Call("arc", sp.X, sp.Y, 5, 0, 2*math.Pi)
+		ctx.Call("fill")
+	}
 }

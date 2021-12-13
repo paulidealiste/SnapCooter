@@ -67,3 +67,14 @@ func OppositeBearing(b string) string {
 	}
 	return roles.E
 }
+
+func RangeGen(start float64, end float64, step float64) []float64 {
+	rng := make([]float64, 1+int(math.Ceil((end-start)/step)))
+	i := 0
+	for start < end {
+		rng[i] = start
+		start = start + step
+		i = i + 1
+	}
+	return rng
+}
