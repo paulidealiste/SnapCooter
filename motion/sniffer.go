@@ -15,9 +15,7 @@ func hardBoundaryPassable(x int, y int, width int, height int, size int) bool {
 }
 
 func sniffDestination(x int, y int, ct roles.Cooter, ctx js.Value) bool {
-	jsdata := ctx.Call("getImageData", x, y, ct.Size, ct.Size).Get("data")
-	godata := make([]byte, 4*ct.Size*ct.Size)
-	js.CopyBytesToGo(godata, jsdata)
+	godata := utils.GetRGBACell(ctx, x, y, ct.Size)
 	r := int(godata[0])
 	g := int(godata[1])
 	b := int(godata[2])

@@ -70,7 +70,7 @@
                             </template>
                         </div>
                     </li>
-                    <li x-data="{ samples: createSamplers() }">
+                    <li x-data="{ samples: createSamplers(), kind: 'neighbours' }">
                         <a>
                             <span class="uk-icon uk-margin-small-right" uk-icon="icon: bolt"></span>
                             Sample
@@ -79,10 +79,20 @@
                             <div class="uk-dropdown-grid uk-child-width-1-1@m" uk-grid>
                                 <div>
                                     <template x-for="(sample, index) in samples" :key="index">
-                                        <div x-on:click="drawSampler(sample)"
+                                        <div x-on:click="drawSampler(sample, cootersize, kind)"
                                             :style="{background: sample, cursor: 'pointer', height: '30px'}">
                                         </div>
                                     </template>
+                                </div>
+                                <div class="uk-flex uk-flex-between">
+                                    <div>
+                                        <input type="radio" x-model="kind" value="curve" id="cco">
+                                        <label for="cco">Curve</label>
+                                    </div>
+                                    <div>
+                                        <input type="radio" x-model="kind" value="neighbours" id="cco">
+                                        <label for="cco">Neighbours</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>

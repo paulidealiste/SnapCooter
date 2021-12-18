@@ -8,6 +8,15 @@ import (
 	"github.com/paulidealiste/SnapCooter/roles"
 )
 
+type RGBAGrid struct {
+	R    [][]byte
+	G    [][]byte
+	B    [][]byte
+	A    [][]byte
+	Rows int
+	Cols int
+}
+
 func GetCanvasSetup(cas string) (js.Value, roles.Setup, error) {
 	document := js.Global().Get("document")
 	if !document.Truthy() {
@@ -77,4 +86,35 @@ func RangeGen(start float64, end float64, step float64) []float64 {
 		i = i + 1
 	}
 	return rng
+}
+
+func GetRGBACell(ctx js.Value, x int, y int, s int) []byte {
+	jsdata := ctx.Call("getImageData", x, y, s, s).Get("data")
+	godata := make([]byte, 4*s*s)
+	js.CopyBytesToGo(godata, jsdata)
+	return godata
+}
+
+func GetRGBAGrid(ctx js.Value, w int, h int, s int) RGBAGrid {
+	rows := h / s
+	cols := w / s
+	r := make([][]byte, rows)
+	g := make([][]byte, rows)
+	b := make([][]byte, rows)
+	a := make([][]byte, rows)
+	for i := 0; i < rows; i++ {
+		r[i] = make([]byte, cols)
+		g[i] = make([]byte, cols)
+		b[i] = make([]byte, cols)
+		a[i] = make([]byte, cols)
+		for j := 0; j < cols; j++ {
+			rgbacell := GetRGBACell(ctx, i*s, j*s, s)
+			r[i][j] = rgbacell[0]
+			g[i][j] = rgbacell[1]
+			b[i][j] = rgbacell[2]
+			a[i][j] = rgbacell[3]
+		}
+	}
+	grid := RGBAGrid{R: r, G: g, B: b, A: a, Rows: rows, Cols: cols}
+	return grid
 }

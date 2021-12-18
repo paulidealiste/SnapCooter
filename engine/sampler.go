@@ -23,7 +23,12 @@ func DrawSampler(this js.Value, args []js.Value) interface{} {
 		}
 	}
 	ctx := canvas.Call("getContext", "2d")
-	samplerCurve(ctx, request.Color, request.Width, request.Height)
+	switch request.Kind {
+	case "curve":
+		samplerCurve(ctx, request.Color, request.Width, request.Height)
+	case "neighbours":
+		neighbourSampler(ctx, request.Color, request.Width, request.Height, request.Size)
+	}
 	return nil
 }
 
@@ -35,11 +40,21 @@ func samplerCurve(ctx js.Value, color string, width int, height int) {
 		{X: float64(width) - 10, Y: float64(height) - 10},
 	}
 	sampled := SamplePoints(controls)
-	fmt.Println(sampled)
 	ctx.Set("fillStyle", color)
 	for _, sp := range sampled {
 		ctx.Call("beginPath")
 		ctx.Call("arc", sp.X, sp.Y, 5, 0, 2*math.Pi)
 		ctx.Call("fill")
+	}
+}
+
+func neighbourSampler(ctx js.Value, color string, width int, height int, size int) {
+	grid := utils.GetRGBAGrid(ctx, width, height, size)
+	ctx.Call("clearRect", 0, 0, width, height)
+	for i := 0; i < grid.Rows; i++ {
+		for j := 0; j < grid.Cols; j++ {
+			ctx.Set("fillStyle", fmt.Sprintf("rgb(%d,%d,%d)", grid.R[i][j], grid.G[i][j], grid.G[i][j]))
+			ctx.Call("fillRect", i*size, j*size, size, size)
+		}
 	}
 }

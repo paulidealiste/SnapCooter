@@ -38,8 +38,8 @@ function app() {
             const plers =  CooterInterpolatedPalettes(...samplers);
             return plers[0];
         },
-        drawSampler(color) {
-            const request = { canvasID: 'sonorous-canvas', color: color, width: 800, height: 600};           
+        drawSampler(color, cootersize, kind) {
+            const request = { canvasID: 'sonorous-canvas', color: color, width: 800, height: 600, size: parseInt(cootersize), kind: kind};
             DrawSampler(JSON.stringify(request));
         }
     }

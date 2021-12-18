@@ -8,7 +8,9 @@ type MotionRequest struct {
 }
 
 type SamplerRequest struct {
-	Color string
+	Color string `json:"color"`
+	Size  int    `json:"size"`
+	Kind  string `json:"kind"`
 	Document
 }
 
