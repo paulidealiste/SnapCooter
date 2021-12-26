@@ -2,7 +2,7 @@
 package motion
 
 import (
-	"log"
+	"fmt"
 	"strings"
 	"syscall/js"
 
@@ -15,20 +15,24 @@ func CooterStep(this js.Value, args []js.Value) interface{} {
 	erred := make([]interface{}, 0)
 	request, err := roles.TranslateMotionRequest(args[0].String())
 	if err != nil {
-		log.Fatal(err)
+		return map[string]interface{}{
+			"error": "Error reading the motion request!",
+		}
 	}
 	actives := make([]roles.Cooter, len(request.Cooters))
 	for i, scs := range request.Cooters {
 		ct, err := roles.TranslateCooter(scs)
 		if err != nil {
-			log.Fatal(err)
+			return map[string]interface{}{
+				"error": fmt.Sprintf("Error reading cooter %d!", ct.ID),
+			}
 		}
 		actives[i] = ct
 	}
 	canvas, err := utils.GetCanvas(request.CanvasID)
 	if err != nil {
 		return map[string]interface{}{
-			"error": "Error reading the setup request!",
+			"error": "Error reading the motion request!",
 		}
 	}
 	ctx := canvas.Call("getContext", "2d")

@@ -14,6 +14,14 @@ type SamplerRequest struct {
 	Document
 }
 
+type GridRequest struct {
+	State         bool   `json:"state"`
+	Stroke        string `json:"stroke"`
+	StrokeWidth   int    `json:"strokeWidth"`
+	TileDimension int    `json:"tileDimension"`
+	Document
+}
+
 //TranslateMotionRequest
 func TranslateMotionRequest(jsmotion string) (MotionRequest, error) {
 	mreq := MotionRequest{}
@@ -30,4 +38,13 @@ func TranslateSamplerRequest(jssampler string) (SamplerRequest, error) {
 		return SamplerRequest{}, err
 	}
 	return sreq, nil
+}
+
+//TranslateGridRequest
+func TranslateGridRequest(jsgrid string) (GridRequest, error) {
+	greq := GridRequest{}
+	if err := json.Unmarshal([]byte(jsgrid), &greq); err != nil {
+		return GridRequest{}, err
+	}
+	return greq, nil
 }

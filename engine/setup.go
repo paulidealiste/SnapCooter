@@ -20,9 +20,11 @@ func CooterSetup(this js.Value, args []js.Value) interface{} {
 	ctx := canvas.Call("getContext", "2d")
 	ctx.Call("clearRect", 0, 0, setup.Width, setup.Height)
 	cooters := make([]interface{}, setup.CooterCount)
-	for i := 0; i < setup.CooterCount; i++ {
-		x := utils.RandomInt(0, setup.Width)
-		y := utils.RandomInt(0, setup.Height)
+	grid := utils.GetPlacementGrid(setup.Width, setup.Height, setup.CooterSize)
+	placements := utils.GridSampler(grid, setup.CooterCount)
+	for i, cell := range placements {
+		x := cell.X
+		y := cell.Y
 		fill := utils.ColorForPosition(setup.Palette, x, y, setup.Width, setup.Height)
 		cc := roles.Cooter{
 			ID:            utils.RandomInt(9000, 90000),
@@ -40,7 +42,6 @@ func CooterSetup(this js.Value, args []js.Value) interface{} {
 		ctx.Call("fillRect", x, y, cc.Size, cc.Size)
 		time.Sleep(1 * time.Millisecond)
 	}
-
 	return map[string]interface{}{
 		"passed": cooters,
 		"error":  make([]interface{}, 0),

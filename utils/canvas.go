@@ -17,6 +17,28 @@ type RGBAGrid struct {
 	Cols int
 }
 
+type PlacementCell struct {
+	I int
+	X int
+	Y int
+	W int
+	H int
+}
+
+type PlacementPadding struct {
+	PT int
+	PB int
+	PL int
+	PR int
+}
+
+type PlacementGrid struct {
+	Cells   []PlacementCell
+	Rows    int
+	Cols    int
+	Padding PlacementPadding
+}
+
 func GetCanvasSetup(cas string) (js.Value, roles.Setup, error) {
 	document := js.Global().Get("document")
 	if !document.Truthy() {
@@ -96,8 +118,8 @@ func GetRGBACell(ctx js.Value, x int, y int, s int) []byte {
 }
 
 func GetRGBAGrid(ctx js.Value, w int, h int, s int) RGBAGrid {
-	rows := h / s
-	cols := w / s
+	rows := int(math.Floor(float64(h) / float64(s)))
+	cols := int(math.Floor(float64(w) / float64(s)))
 	r := make([][]byte, rows)
 	g := make([][]byte, rows)
 	b := make([][]byte, rows)
@@ -116,5 +138,27 @@ func GetRGBAGrid(ctx js.Value, w int, h int, s int) RGBAGrid {
 		}
 	}
 	grid := RGBAGrid{R: r, G: g, B: b, A: a, Rows: rows, Cols: cols}
+	return grid
+}
+
+func GetPlacementGrid(w int, h int, s int) PlacementGrid {
+	nx := int(math.Floor(float64(w)/float64(s))) - 2
+	ny := int(math.Floor(float64(h)/float64(s))) - 2
+	px := w - nx*s
+	py := h - ny*s
+
+	pl := int(math.Ceil(float64(px)/2.0) - 0.5)
+	pt := int(math.Ceil(float64(py)/2.0) - 0.5)
+	pr := w - nx*s - pl
+	pb := h - ny*s - pt
+	cells := make([]PlacementCell, nx*ny)
+	for i := 0; i < nx; i++ {
+		for j := 0; j < ny; j++ {
+			cell := PlacementCell{X: pl + i*s, Y: pt + j*s, W: s, H: s, I: i*ny + j}
+			cells[cell.I] = cell
+		}
+	}
+
+	grid := PlacementGrid{Cells: cells, Rows: ny, Cols: nx, Padding: PlacementPadding{PT: pt, PB: pb, PL: pl, PR: pr}}
 	return grid
 }

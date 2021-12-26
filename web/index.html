@@ -18,8 +18,8 @@
 
 <body>
     <div x-data="app()">
-        <nav class="uk-navbar-container" x-data="{ palettes: createPalettes(), selected: 1 }" uk-navbar>
-            <div class="uk-navbar-left" x-data="{ spalette: palettes[selected], cootercount: 100, cootersize: 10 }">
+        <nav class="uk-navbar-container" x-data="{ palettes: createPalettes(), selected: 1, cootercount: 100, cootersize: 10 }" uk-navbar>
+            <div class="uk-navbar-left" x-data="{ spalette: palettes[selected] }">
                 <a class="uk-navbar-item uk-logo">
                     <div>
                         SnapCooter
@@ -99,9 +99,17 @@
                     </li>
                 </ul>
             </div>
+            <div class="uk-navbar-right" x-data="{ grid: false }">
+                <button class="uk-button uk-button-small uk-button-default uk-margin-small-right uk-text-muted " x-on:click="grid = !grid; manageGrid(grid, cootersize)">
+                    <template x-if="grid"><span uk-icon="check"></span></template>
+                    <template x-if="!grid"><span uk-icon="close"></span></template>
+                    <span>grid</span>
+                </button>
+            </div>
         </nav>
         <div class="uk-grid-collapse uk-text-center uk-margin-large-top" uk-grid>
             <div class="uk-background-muted uk-padding uk-width-expand@m">
+                <canvas class="uk-background-default uk-position-absolute" :style="{background: 'transparent'}" id="notation-canvas" width="800" height="600"></canvas>
                 <canvas class="uk-background-default" id="sonorous-canvas" width="800" height="600"></canvas>
             </div>
             <div class="uk-background-secondary uk-padding uk-width-auto@m">

@@ -57,3 +57,16 @@ func SimpleProbable(probability float64) bool {
 	rand.Seed(time.Now().UnixNano())
 	return rand.Float64() < probability
 }
+
+func GridSampler(grid PlacementGrid, quantity int) []PlacementCell {
+	sample := make([]PlacementCell, quantity)
+	copies := make([]PlacementCell, len(grid.Cells))
+	copy(copies, grid.Cells)
+	for i := 0; i < quantity; i++ {
+		ri := RandomInt(0, len(copies)-1)
+		sample[i] = copies[ri]
+		copies[ri] = copies[len(copies)-1]
+		copies = copies[:len(copies)-1]
+	}
+	return sample
+}

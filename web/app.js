@@ -41,6 +41,10 @@ function app() {
         drawSampler(color, cootersize, kind) {
             const request = { canvasID: 'sonorous-canvas', color: color, width: 800, height: 600, size: parseInt(cootersize), kind: kind};
             DrawSampler(JSON.stringify(request));
+        },
+        manageGrid(state, cootersize) {
+            const request = { canvasID: 'notation-canvas', width: 800, height: 600, state: state, stroke: '#999999', strokeWidth: 1, tileDimension: parseInt(cootersize)};
+            ManageGrid(JSON.stringify(request));
         }
     }
 }

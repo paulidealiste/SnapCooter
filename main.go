@@ -13,5 +13,6 @@ func main() {
 	js.Global().Set("CooterStep", js.FuncOf(motion.CooterStep))
 	js.Global().Set("CooterInterpolatedPalettes", js.FuncOf(utils.CooterInterpolatedPalettes))
 	js.Global().Set("DrawSampler", js.FuncOf(engine.DrawSampler))
+	js.Global().Set("ManageGrid", js.FuncOf(engine.ManageGrid))
 	<-make(chan bool)
 }
